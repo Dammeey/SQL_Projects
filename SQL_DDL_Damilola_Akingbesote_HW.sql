@@ -1,3 +1,5 @@
+CREATE DATABASE kindergarten;
+
 CREATE SCHEMA IF NOT EXISTS kindergarten AUTHORIZATION postgres;
 
     CREATE TABLE IF NOT EXISTS kindergarten.group_type
