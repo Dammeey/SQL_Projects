@@ -505,7 +505,7 @@ SELECT s2.first_name || ' ' || s2.last_name AS doctors
 FROM (SELECT s.staff_id, s.first_name, s.last_name
         FROM health.staffs s
         WHERE category = 'doctor') s2
-JOIN health.patient p 
+LEFT JOIN health.patient p 
 ON p.doctor  = s2.staff_id
 WHERE visitation_date >= CURRENT_DATE - INTERVAL '3 months'
 GROUP BY doctors
