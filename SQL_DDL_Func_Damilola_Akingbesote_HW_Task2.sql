@@ -45,6 +45,10 @@ BEGIN
                 ft1.rental_date
         FROM films_table ft1
         ORDER BY ft1.rental_id;
+       
+      	IF NOT FOUND THEN
+      		RAISE NOTICE 'Movie with % was not found', word;
+		END IF;
         
 END;
 $$
@@ -52,6 +56,6 @@ $$
 LANGUAGE plpgsql;
 
 SELECT * 
-FROM public.films_in_stock_by_title('%LOVE%');
+FROM public.films_in_stock_by_title('%MONSTERSEED%');
 
 --DROP FUNCTION public.films_in_stock_by_title(VARCHAR(255))
