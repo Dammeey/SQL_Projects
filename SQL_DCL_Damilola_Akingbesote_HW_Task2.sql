@@ -45,7 +45,7 @@ WHERE "name" = 'Lithuanian';
 CREATE ROLE backend_tester;
 GRANT CONNECT ON DATABASE postgres TO backend_tester;
 GRANT USAGE ON SCHEMA public TO backend_tester;
-GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO db_developer;
+GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO backend_tester;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO backend_tester;
 
 --SET ROLE postgres;
@@ -91,15 +91,18 @@ AND EXISTS (SELECT 1
 
 
 --creating personalized group role
-CREATE ROLE client_group;
-GRANT CONNECT ON DATABASE postgres TO client_group;
-GRANT USAGE ON SCHEMA public TO client_group;
-GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO client_group;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO client_group;
+--CREATE ROLE client_group;
+--GRANT CONNECT ON DATABASE postgres TO client_group;
+--GRANT USAGE ON SCHEMA public TO client_group;
+--GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO client_group;
+--GRANT SELECT ON ALL TABLES IN SCHEMA public TO client_group;
 
 --creating personalized role - client_holly_fox
 CREATE ROLE client_holly_fox;
-GRANT client_group TO client_holly_fox;
+GRANT customer TO client_holly_fox;
+GRANT SELECT ON TABLE public.rental TO client_holly_fox; 
+GRANT SELECT ON TABLE public.payment TO client_holly_fox; 
+GRANT SELECT ON TABLE public.customer TO client_holly_fox; 
 
 --testing the client_holly_fox role
 SET ROLE client_holly_fox;
@@ -109,8 +112,11 @@ SELECT current_user;
 SELECT * FROM public.payment;
 SELECT * FROM public.actor;
 
---REASSIGN OWNED BY client_anna_hill TO postgres;  -- or some other trusted role
---DROP OWNED BY client_anna_hill;
---DROP ROLE client_anna_hill;
+--REASSIGN OWNED BY client_holly_fox TO postgres;  -- or some other trusted role
+--DROP OWNED BY client_holly_fox;
+--DROP ROLE client_holly_fox;
+
+--ALTER TABLE public.rental DISABLE ROW LEVEL SECURITY;
+--ALTER TABLE public.payment DISABLE ROW LEVEL SECURITY;
 
 --SET ROLE postgres;

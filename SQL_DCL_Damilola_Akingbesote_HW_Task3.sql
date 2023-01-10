@@ -12,14 +12,14 @@ ALTER TABLE public.payment ENABLE ROW LEVEL SECURITY;
 --more general policy
 CREATE POLICY client_rental
 ON public.rental FOR SELECT
-TO client_group
+TO client_holly_fox
 USING (customer_id = (SELECT customer_id
                         FROM customer
                         WHERE 'client'||'_'||lower(first_name)||'_'||lower(last_name) like current_user));
                         
 CREATE POLICY client_payment
 ON public.payment FOR SELECT
-TO client_group
+TO client_holly_fox
 USING (customer_id = (SELECT customer_id
                         FROM customer
                         WHERE 'client'||'_'||lower(first_name)||'_'||lower(last_name) like current_user));
@@ -31,6 +31,9 @@ SELECT current_user;
 
 SELECT * FROM public.rental;
 SELECT * FROM public.payment;
+
+SELECT * FROM public.actor;
+SELECT * FROM public.film;
 
 --SET ROLE postgres;
 --DROP POLICY client_rental ON public.rental;
