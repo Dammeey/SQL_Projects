@@ -962,7 +962,7 @@ ON b.id = p.brand
 WHERE pa.transaction_date  >= date_trunc('month', current_date - interval '1' month)
 AND pa.transaction_date  <= date_trunc('day', current_date);
 
-SELECT * FROM hs_appliances_store.all_tables
+SELECT * FROM hs_appliances_store.all_tables;
 
 
 --creating role manager
