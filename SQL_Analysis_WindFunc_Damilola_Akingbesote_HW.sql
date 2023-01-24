@@ -16,7 +16,7 @@ FROM (
 				c2.cust_first_name,
 				SUM(s.amount_sold) AS amount_sold,
 				SUM(SUM(s.amount_sold)) OVER (PARTITION BY c.channel_desc) AS channel_sales,
-				ROW_NUMBER() OVER (PARTITION BY c.channel_desc ORDER BY SUM(s.amount_sold) DESC ) AS col_rank
+				RANK() OVER (PARTITION BY c.channel_desc ORDER BY SUM(s.amount_sold) DESC ) AS col_rank
 				
 		FROM sh.channels c 
 		JOIN sh.sales s 
@@ -39,7 +39,7 @@ SELECT *,
 FROM crosstab(
     'SELECT p.prod_name,
             t.calendar_quarter_number,
-            SUM(s.amount_sold) AS amount_sold
+            SUM(s.amount_sold) AS amount_sold 
     FROM sh.products p 
     JOIN sh.sales s 
     ON s.prod_id = p.prod_id 
@@ -56,6 +56,7 @@ FROM crosstab(
     GROUP BY p.prod_name,t.calendar_quarter_number
     ORDER BY p.prod_name, t.calendar_quarter_number'
 ) AS  ct (prod_name VARCHAR(50), q1 NUMERIC, q2 NUMERIC, q3 NUMERIC, q4 NUMERIC);
+
 
 
 
@@ -157,7 +158,7 @@ WITH cte AS (
 				c2.cust_last_name,
 				c2.cust_first_name,
 				SUM(s.amount_sold) AS amount_sold,
-				ROW_NUMBER() OVER (PARTITION BY c.channel_desc, t.calendar_year ORDER BY SUM(s.amount_sold) DESC ) AS col_rank,
+				RANK() OVER (PARTITION BY c.channel_desc, t.calendar_year ORDER BY SUM(s.amount_sold) DESC ) AS col_rank,
 				t.calendar_year
 		FROM sh.channels c
 		JOIN sh.sales s
@@ -197,7 +198,7 @@ FROM crosstab(
 		'SELECT t.calendar_month_desc,
 				p.prod_category,
 				c2.country_region,
-				SUM(s.amount_sold) as channel_sales
+				SUM(s.amount_sold)::BIGINT as channel_sales
 		FROM sh.times t
 		JOIN sh.sales s 
 		ON t.time_id = s.time_id 
@@ -213,7 +214,7 @@ FROM crosstab(
 		',	
 		'VALUES (''Americas''), (''Europe'')'
 
-) AS ct2 (calendar_month_desc VARCHAR(8), prod_category VARCHAR(50),  "Americas SALES" NUMERIC, "Europe SALES" NUMERIC)
+) AS ct2 (calendar_month_desc VARCHAR(8), prod_category VARCHAR(50),  "Americas SALES" BIGINT, "Europe SALES" BIGINT)
 
 ORDER BY calendar_month_desc, prod_category;
 
